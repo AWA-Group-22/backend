@@ -447,7 +447,7 @@ app.get("/manager/order/modify/status",passport.authenticate('jwt', { session:fa
              
                 db.query(
                 
-                  "SELECT `order`.order_status, `order`.product_id, product.product_name FROM `order` INNER JOIN `product` ON `order`.product_id = product.product_id WHERE product.product_id IN "+ stringSQL + "AND `order`.order_status != 'Delivered' ",
+                  "SELECT `order`.order_id, `order`.order_status, `order`.product_id, product.product_name FROM `order` INNER JOIN `product` ON `order`.product_id = product.product_id WHERE product.product_id IN "+ stringSQL + "AND `order`.order_status != 'Delivered' ",
                    function (err, rows) {
                      if (err) throw err;
                      
