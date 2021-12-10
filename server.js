@@ -8,12 +8,22 @@ const mysql = require("mysql");
 const passport = require("passport");
 const BasicStrategy = require("passport-http").BasicStrategy
 const cors = require("cors");
+const cloudinary = require('cloudinary');
+const cloudinaryStorage = require('multer-storage-cloudinary');
+
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "",
   database: "webproject123",
 });
+
+var storage = cloudinaryStorage({
+  cloudinary: cloudinary,
+  folder: '', // give cloudinary folder where you want to store images
+  allowedFormats: ['jpg', 'png'],
+});
+
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -27,6 +37,15 @@ passport.use(new JwtStrategy(jwtOptions, function(jwt_payload, done) {
   console.log(jwt_payload);
     done(null, jwt_payload);
 }));
+
+//Test adding images to the database
+app.post('/uploadImage', imageUpload.single('myImage'), (req, res) => {
+
+    console.log(res)
+  res.send("successful !!!");
+}, (error, req, res, next) => {
+  res.status(400).send({ error: error.message })
+})
 
 app.post("/login",passport.authenticate('basic', { session: false }),(req, res) => {
   
