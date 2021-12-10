@@ -378,12 +378,12 @@ app.post("/customer/order",passport.authenticate('jwt', { session:false }),custo
       console.log(id)
        var sql = "INSERT INTO `order` ( `user_id`, `product_id`, `order_status`) VALUES ?";
       var values = [
-        [
+        
           (user_id = id),
           (product_id = req.body.product_id),
           (order_status = "Ordering"),
           
-        ],
+        
       ];
       console.log(values);
               db.query(sql, [values], function (err) {
