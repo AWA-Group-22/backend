@@ -835,9 +835,9 @@ app.post("/register", (req, res) => {
   
 });
 // create restaurant
-app.post("/register_restaurant",passport.authenticate('jwt', { session:false }), manager,(req, res) => {
+app.post("/register_restaurant",passport.authenticate('jwt', { session:false }), parser.single('image'), manager,(req, res) => {
   const user = req.user.user.username;
-  if( req.body.restaurant_name && req.body.address_restaurant &&  req.body.operating_hours && req.body.image && req.body.restaurant_type && req.body.price_level) {
+  if( req.body.restaurant_name && req.body.address_restaurant &&  req.body.operating_hours && req.file.path && req.body.restaurant_type && req.body.price_level) {
     db.query(
       `SELECT user_id FROM user WHERE username ='${user}'`,
         function (err, rows) {
@@ -848,18 +848,20 @@ app.post("/register_restaurant",passport.authenticate('jwt', { session:false }),
             if (err) throw err;
             var result2 = Object.values(JSON.parse(JSON.stringify(rows)));
             var result3 = result2.map(a => a.user_id)
-            // console.log(result1)
-            console.log(result3)
+         
+           
+            
             if (result3.includes(result1[0]) === false ) {
               var sql =
               "INSERT INTO restaurant (restaurant_name, address, operating_hours,image,type,price_level,user_id) VALUES ?";
-            
+               
+               
               var values = [
               [
                 (restaurant_name = req.body.restaurant_name),
                 (address = req.body.address_restaurant),
                 (operating_hours = req.body.operating_hours),
-                (image = req.body.image),
+                (image = req.file.path),
                 (restaurant_type = req.body.restaurant_type),
                 (price_level = req.body.price_level),
                 (user_id = result1)
@@ -883,6 +885,9 @@ app.post("/register_restaurant",passport.authenticate('jwt', { session:false }),
     ) 
     
   }  else {
+    
+    // console.log(req.file.path)
+    
     res.send({message :"Please fill in all the information"})
   }
   
@@ -891,7 +896,7 @@ app.post("/register_restaurant",passport.authenticate('jwt', { session:false }),
   
    
  
-});
+})
 
 app.listen(process.env.PORT || 3000, function(){
   console.log("Express server listening on port %d in %s mode", this.address().port, app.settings.env);
