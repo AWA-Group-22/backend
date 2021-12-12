@@ -740,8 +740,8 @@ app.get("/restaurant/menu",passport.authenticate('jwt', { session:false }),manag
 });
 
 //Create Menu
-app.post("/restaurant/menu",passport.authenticate('jwt', { session:false }), manager,(req, res) => {
-  if(req.body.product_name && req.body.price &&  req.body.description && req.body.product_image && req.body.category_name && req.body.restaurant_name) {
+pp.post("/restaurant/menu",passport.authenticate('jwt', { session:false }), parser.single('image'), manager,(req, res) => {
+  if(req.body.product_name && req.body.price &&  req.body.description && req.file.path && req.body.category_name && req.body.restaurant_name) {
     db.query(
       `SELECT category_id FROM category WHERE category_name ='${req.body.category_name}'`,
         function (err, rows) {
@@ -764,7 +764,7 @@ app.post("/restaurant/menu",passport.authenticate('jwt', { session:false }), man
                   (product_name = req.body.product_name),
                   (price = req.body.price),
                   (description = req.body.description),
-                  (product_image= req.body.product_image),
+                  (product_image= req.file.path),
                   (category_id = category),
                   (restaurant_id = restaurant)
                 ],
@@ -789,7 +789,7 @@ app.post("/restaurant/menu",passport.authenticate('jwt', { session:false }), man
   } else {
     res.send({message :"Please fill in all the information"})
   }
-})
+});
 //create user account and account is unique
 app.post("/register", (req, res) => {
   
