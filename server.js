@@ -8,6 +8,8 @@ const mysql = require("mysql");
 const passport = require("passport");
 const BasicStrategy = require("passport-http").BasicStrategy
 const cors = require("cors");
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
 const db = mysql.createConnection({
   host: "localhost",
@@ -15,6 +17,16 @@ const db = mysql.createConnection({
   password: "",
   database: "webproject123",
 });
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: '',
+    format: async (req, file) => 'png', // supports promises as well
+  
+  },
+});
+
+var parser = multer({ storage: storage });
 app.use(cors());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
