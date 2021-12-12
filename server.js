@@ -10,13 +10,19 @@ const BasicStrategy = require("passport-http").BasicStrategy
 const cors = require("cors");
 const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
+const multer = require('multer');
+cloudinary.config({ 
+  cloud_name: 'hkkf8la48', 
+  api_key: '499861985493486',
+  api_secret: 'J3CCBaeckEdx-QLPpSKaGRIM0qM'
+});
 
 //Connecting to the database
-const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "",
-  database: "webproject123",
+const db = mysql.createPool({
+  host: "eu-cdbr-west-01.cleardb.com",
+  user: "b5e1cc05d567dc",
+  password: "b0c9f2fc",
+  database: "heroku_1881ea096897225",
 });
 
 //Connecting to the cloudinary storage
