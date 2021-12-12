@@ -11,12 +11,15 @@ const cors = require("cors");
 const cloudinary = require('cloudinary').v2;
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
+//Connecting to the database
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",
   password: "",
   database: "webproject123",
 });
+
+//Connecting to the cloudinary storage
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
@@ -41,6 +44,7 @@ passport.use(new JwtStrategy(jwtOptions, function(jwt_payload, done) {
     done(null, jwt_payload);
 }));
 
+//User Login
 app.post("/login",passport.authenticate('basic', { session: false }),(req, res) => {
   
   const payload = {
@@ -56,7 +60,7 @@ app.post("/login",passport.authenticate('basic', { session: false }),(req, res) 
 });
 
 
-
+//Check if it is a manager
 function manager (req, res, next) {
   const user = req.user.user.username;
   db.query(
@@ -76,6 +80,7 @@ function manager (req, res, next) {
   
 }
 
+//Check if it is a customer
 function customer (req, res, next) {
   const user = req.user.user.username;
   db.query(
@@ -94,6 +99,7 @@ function customer (req, res, next) {
   
   
 }
+// logOut Api
 app.get('/logout', function (req, res) {
   delete req.user
   res.send({message : "logout"});
