@@ -105,7 +105,7 @@ app.get('/logout', function (req, res) {
   res.send({message : "logout"});
 });  
 
-
+//Get the customer's information
 app.get("/customer",passport.authenticate('jwt', { session:false }),customer,(req, res) => {
   const user = req.user.user.username;
   db.query(
@@ -118,6 +118,7 @@ app.get("/customer",passport.authenticate('jwt', { session:false }),customer,(re
     }
   );
 });
+
 // browse restaurant (customer)
 app.get("/restaurants",(req, res) => {    
   db.query(
@@ -132,8 +133,8 @@ app.get("/restaurants",(req, res) => {
     
   );
 });
-// Search for restaurant 
 
+// Search for restaurant 
 app.post("/restaurant/search",(req, res) => {
    db.query(
     `SELECT * FROM restaurant WHERE restaurant_name LIKE'%${req.body.restaurant}%'`,
@@ -414,6 +415,8 @@ app.post("/customer/order",passport.authenticate('jwt', { session:false }),custo
  
   res.send({message :"okay"})       
 });
+
+// Get the Manager's information
 app.get("/manager",passport.authenticate('jwt', { session:false }),manager,(req, res) => {
   const user = req.user.user.username;
   db.query(
@@ -422,7 +425,7 @@ app.get("/manager",passport.authenticate('jwt', { session:false }),manager,(req,
       if (err) throw err;
       var result = Object.values(JSON.parse(JSON.stringify(rows)));
       res.send(result);
-      console.log("customer")
+      console.log("manager")
     }
   );
 });
@@ -497,6 +500,7 @@ app.get("/manager/order/modify/status",passport.authenticate('jwt', { session:fa
  
        
 });
+//APi for manager , Modified order_status
 app.post("/manager/order/modify/status",passport.authenticate('jwt', { session:false }),manager,(req, res) => {
   if( req.body.order_id && req.body.order_status ) {
     var sql = "UPDATE `order` SET order_status = ? WHERE order_id = " + `${req.body.order_id}`
@@ -710,7 +714,7 @@ passport.use(
   })
 );
 
-// create menu  
+// APi for Get restaurant name and Category
 app.get("/restaurant/menu",passport.authenticate('jwt', { session:false }),manager,(req, res) => {
   db.query(
     `SELECT category_name FROM category `,
@@ -734,6 +738,8 @@ app.get("/restaurant/menu",passport.authenticate('jwt', { session:false }),manag
     
 );
 });
+
+//Create Menu
 app.post("/restaurant/menu",passport.authenticate('jwt', { session:false }), manager,(req, res) => {
   if(req.body.product_name && req.body.price &&  req.body.description && req.body.product_image && req.body.category_name && req.body.restaurant_name) {
     db.query(
