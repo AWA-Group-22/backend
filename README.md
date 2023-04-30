@@ -1,4 +1,3 @@
-#npm install
-This is a backend application that you can use npm install, to install project dependencies and run on your local server.
-Or you can deploy on heroku.
-Start the program with node server.js
+I'm developing a backend system for an order food app that allows admins to easily add new restaurants, set up menus, and track orders in real-time.
+Customers can effortlessly order their favorite food from multiple restaurants and keep track of their order status. 
+To ensure secure access, I'm using JWT authentication and a reliable MySQL database. I'm also using Cloudinary to handle images, delivering visually appealing graphics to enhance the user experience.
